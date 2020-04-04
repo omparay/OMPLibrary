@@ -21,3 +21,7 @@ Example: Since the UI components of MacOS and iOS are not available to Linux, th
 This part of the library will contain defined classes that are useful for certain development concerns.
 
 Example: The *"Parser"* class contains functions that simplify the parsing of JSON files or data into a generic `Dictionary<Sring,Any>`.
+
+## Unit Tests
+
+The library will include test cases for each extension and utility. These test cases can also serve as example code for anyone who would like to use these.
