@@ -77,8 +77,8 @@ public class HttpClient{
             handler(.failure(HttpClientError.badUrl))
             return
         }
-        guard let bodyData = body,
-              let data = bodyData.data(using: .utf8) else {
+        guard let bodyString = body,
+              let data = bodyString.data(using: .utf8) else {
             handler(.failure(HttpClientError.stringEncoding))
             return
         }
@@ -92,6 +92,11 @@ public class HttpClient{
                         body: Data? = nil,
                         queue: DispatchQueue,
                         handler: @escaping ExecutionBlock){
+        guard let url = URL(string: urlString) else {
+            handler(.failure(HttpClientError.badUrl))
+            return
+        }
+        request(async: concurrent, url: url, method: method, header: header, body: body, queue: queue, handler: handler)
     }
 
     public func request(async concurrent: Bool = true,
@@ -101,6 +106,12 @@ public class HttpClient{
                         body: String? = nil,
                         queue: DispatchQueue,
                         handler: @escaping ExecutionBlock){
+        guard let bodyString = body,
+              let data = bodyString.data(using: .utf8) else {
+            handler(.failure(HttpClientError.stringEncoding))
+            return
+        }
+        request(async: concurrent, url: url, method: method, header: header, body: data, queue: queue, handler: handler)
     }
 
 //MARK: Private Methods
