@@ -70,14 +70,14 @@ public class HttpClient{
                         urlString: String,
                         method: Method,
                         header: Header? = nil,
-                        body: String? = nil,
-                        queue: DispatchQueue,
+                        bodyContent: String? = nil,
+                        queue: DispatchQueue = DispatchQueue.global(qos: .utility),
                         handler: @escaping ExecutionBlock){
         guard let url = URL(string: urlString) else {
             handler(.failure(HttpClientError.badUrl))
             return
         }
-        guard let bodyString = body,
+        guard let bodyString = bodyContent,
               let data = bodyString.data(using: .utf8) else {
             handler(.failure(HttpClientError.stringEncoding))
             return
@@ -90,7 +90,7 @@ public class HttpClient{
                         method: Method,
                         header: Header? = nil,
                         body: Data? = nil,
-                        queue: DispatchQueue,
+                        queue: DispatchQueue = DispatchQueue.global(qos: .utility),
                         handler: @escaping ExecutionBlock){
         guard let url = URL(string: urlString) else {
             handler(.failure(HttpClientError.badUrl))
@@ -103,10 +103,10 @@ public class HttpClient{
                         url: URL,
                         method: Method,
                         header: Header? = nil,
-                        body: String? = nil,
-                        queue: DispatchQueue,
+                        bodyContent: String? = nil,
+                        queue: DispatchQueue = DispatchQueue.global(qos: .utility),
                         handler: @escaping ExecutionBlock){
-        guard let bodyString = body,
+        guard let bodyString = bodyContent,
               let data = bodyString.data(using: .utf8) else {
             handler(.failure(HttpClientError.stringEncoding))
             return
