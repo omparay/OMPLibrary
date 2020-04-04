@@ -36,8 +36,9 @@ class HttpClientTests: XCTestCase {
 
                 }
             }
-
         })
+
+        task.resume()
 
         wait(for: [received], timeout: 60.0)
     }
