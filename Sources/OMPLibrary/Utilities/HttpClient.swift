@@ -18,7 +18,7 @@ public enum Method:String{
 public enum HttpClientError: Error{
     case badUrl, noData, stringEncoding
 
-    public var errorDescription: String{
+    public var localizedDescription: String{
         switch self{
             case .badUrl:
             return "Malformed URL string"
