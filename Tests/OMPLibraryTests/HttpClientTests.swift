@@ -47,12 +47,8 @@ class HttpClientTests: XCTestCase {
         let received = expectation(description: "Http Get Test")
 
         HttpClient.sharedInstance.request(
-            async: true,
             urlString: "https://itunes.apple.com/search?term=jack+johnson",
-            method: Method.Get,
-            header: nil,
-            bodyContent: nil,
-            queue: DispatchQueue.global(qos: .utility))
+            method: Method.Get)
             { result in
                 switch result{
                     case .success(let data):

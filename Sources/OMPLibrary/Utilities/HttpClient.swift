@@ -93,35 +93,35 @@ public class HttpClient{
     }
 
     public func request(async concurrent: Bool = true,
-                        urlString: String,
+                        stringUrl: String,
                         method: Method,
                         header: Header? = nil,
-                        body: Data? = nil,
+                        bodyData: Data? = nil,
                         queue: DispatchQueue = DispatchQueue.global(qos: .utility),
                         handler: @escaping ExecutionBlock){
-        guard let url = URL(string: urlString) else {
+        guard let url = URL(string: stringUrl) else {
             handler(.failure(HttpClientError.badUrl))
             return
         }
-        request(async: concurrent, url: url, method: method, header: header, body: body, queue: queue, handler: handler)
+        request(async: concurrent, url: url, method: method, header: header, body: bodyData, queue: queue, handler: handler)
     }
 
     public func request(async concurrent: Bool = true,
-                        url: URL,
+                        urlSpec: URL,
                         method: Method,
                         header: Header? = nil,
-                        bodyContent: String? = nil,
+                        bodyInfo: String? = nil,
                         queue: DispatchQueue = DispatchQueue.global(qos: .utility),
                         handler: @escaping ExecutionBlock){
         var data: Data?
-        if let body = bodyContent{
-            guard let bodyData = body.data(using: .utf8) else {
+        if let bodyContent = bodyInfo{
+            guard let bodyData = bodyContent.data(using: .utf8) else {
                 handler(.failure(HttpClientError.stringEncoding))
                 return
             }
             data = bodyData
         }
-        request(async: concurrent, url: url, method: method, header: header, body: data, queue: queue, handler: handler)
+        request(async: concurrent, url: urlSpec, method: method, header: header, body: data, queue: queue, handler: handler)
     }
 
 //MARK: Private Methods

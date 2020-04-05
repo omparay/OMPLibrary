@@ -6,6 +6,7 @@ public func allTests() -> [XCTestCaseEntry] {
         testCase(BoolExtensionsTests.allTests),
         testCase(OMPLibraryTests.allTests),
         testCase(HttpClientTests.allTests),
+        testCase(ParserTests.allTests),
     ]
 }
 #endif
