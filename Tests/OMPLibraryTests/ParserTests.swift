@@ -18,7 +18,7 @@ class ParserTests: XCTestCase {
                     return
                 }
                 guard let jsonObject = Parser.jsonFrom(data: data) else {
-                    XCTFail("Could not parse data...")
+                    XCTFail("Parser could not parse data, but it was deserialized by JSONSerialization as:\n\(jsonData)")
                     received.fulfill()
                     return
                 }
