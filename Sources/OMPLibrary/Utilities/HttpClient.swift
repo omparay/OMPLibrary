@@ -6,7 +6,9 @@
 
 import CoreFoundation
 import Foundation
+#if canImport(FoundationNetworking)
 import FoundationNetworking
+#endif
 
 public typealias Header = [String: String]
 public typealias ExecutionBlock = (Result<Data, Error>) -> Void
