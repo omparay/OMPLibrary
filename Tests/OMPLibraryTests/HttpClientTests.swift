@@ -62,7 +62,11 @@ class HttpClientTests: XCTestCase {
                     XCTAssertNotNil(data)
                     received.fulfill()
                     case .failure(let error):
-                    XCTFail(error.localizedDescription)
+                    if let httpError = error as? HttpClientError{
+                        XCTFail(httpError.localizedDescription)
+                    } else {
+                        XCTFail(error.localizedDescription)
+                    }
                     received.fulfill()
                 }
             }

@@ -63,6 +63,10 @@ public class HttpClient{
             queue.async{
                 self.requestExecution(request: dataRequest, handler: handler)
             }
+        } else {
+            queue.sync {
+                self.requestExecution(request: dataRequest, handler: handler)
+            }
         }
     }
 
@@ -73,14 +77,17 @@ public class HttpClient{
                         bodyContent: String? = nil,
                         queue: DispatchQueue = DispatchQueue.global(qos: .utility),
                         handler: @escaping ExecutionBlock){
+        var data: Data?
         guard let url = URL(string: urlString) else {
             handler(.failure(HttpClientError.badUrl))
             return
         }
-        guard let bodyString = bodyContent,
-              let data = bodyString.data(using: .utf8) else {
-            handler(.failure(HttpClientError.stringEncoding))
-            return
+        if let body = bodyContent{
+            guard let bodyData = body.data(using: .utf8) else {
+                handler(.failure(HttpClientError.stringEncoding))
+                return
+            }
+            data = bodyData
         }
         request(async: concurrent, url: url, method: method, header: header, body: data, queue: queue, handler: handler)
     }
@@ -106,10 +113,13 @@ public class HttpClient{
                         bodyContent: String? = nil,
                         queue: DispatchQueue = DispatchQueue.global(qos: .utility),
                         handler: @escaping ExecutionBlock){
-        guard let bodyString = bodyContent,
-              let data = bodyString.data(using: .utf8) else {
-            handler(.failure(HttpClientError.stringEncoding))
-            return
+        var data: Data?
+        if let body = bodyContent{
+            guard let bodyData = body.data(using: .utf8) else {
+                handler(.failure(HttpClientError.stringEncoding))
+                return
+            }
+            data = bodyData
         }
         request(async: concurrent, url: url, method: method, header: header, body: data, queue: queue, handler: handler)
     }
@@ -117,7 +127,7 @@ public class HttpClient{
 //MARK: Private Methods
     fileprivate func requestExecution(request: URLRequest,
                                       handler: @escaping ExecutionBlock){
-        let task = URLSession.shared.dataTask(with: request){
+        let task = URLSession.shared.dataTask(with: request, completionHandler: {
             (responseData, responseStatus, responseError) in
             if let errorOcurred = responseError{
                 handler(.failure(errorOcurred))
@@ -128,7 +138,7 @@ public class HttpClient{
                 return
             }
             handler(.success(returnedData))
-        }
+        })
         task.resume()
     }
 
